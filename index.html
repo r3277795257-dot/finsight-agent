@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+      name="description"
+      content="FinSight Agent turns unstructured market events and price data into traceable event-study diagnostics and risk memos."
+    >
+    <title>FinSight Agent</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Project overview">
+        <div class="brand-lockup">
+          <div class="brand-mark" aria-hidden="true">F</div>
+          <div>
+            <p class="eyebrow">Financial Engineering Agent</p>
+            <h1>FinSight Agent</h1>
+          </div>
+        </div>
+
+        <nav class="side-nav" aria-label="Main sections">
+          <a href="#workspace">Workspace</a>
+          <a href="#diagnostics">Diagnostics</a>
+          <a href="#agent">Agent Trace</a>
+          <a href="#report">Risk Memo</a>
+        </nav>
+
+        <div class="profile-panel">
+          <p class="eyebrow">Project Note</p>
+          <p>Analyze how a market event changes risk, abnormal return, and follow-up research priorities.</p>
+        </div>
+
+        <div class="status-stack" aria-label="Current project status">
+          <div>
+            <span class="status-dot ready"></span>
+            <span>Runs fully in the browser</span>
+          </div>
+          <div>
+            <span class="status-dot caution"></span>
+            <span>Research use only, not investment advice</span>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main">
+        <section class="topbar" aria-label="Header controls">
+          <div>
+            <p class="eyebrow">AI-Assisted Market Event Analysis</p>
+            <h2>From Unstructured Evidence To Risk Insight</h2>
+          </div>
+          <div class="topbar-actions">
+            <button class="icon-button ghost" id="loadDemoButton" title="Load selected scenario" type="button">
+              <span aria-hidden="true">R</span>
+              <span>Load Scenario</span>
+            </button>
+            <button class="icon-button primary" id="analyzeButton" title="Run analysis" type="button">
+              <span aria-hidden="true">&gt;</span>
+              <span>Run Analysis</span>
+            </button>
+          </div>
+        </section>
+
+        <section class="workspace-grid" id="workspace">
+          <form class="panel input-panel" id="analysisForm">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Input</p>
+                <h3>Market Event Workspace</h3>
+              </div>
+              <span class="pill">Event Study Ready</span>
+            </div>
+
+            <div class="field-grid">
+              <label>
+                <span>Scenario</span>
+                <select id="scenarioInput" name="scenario"></select>
+              </label>
+              <label>
+                <span>Ticker or asset</span>
+                <input id="tickerInput" name="ticker" value="EVCO" autocomplete="off">
+              </label>
+              <label>
+                <span>Sector</span>
+                <input id="sectorInput" name="sector" value="EV supply chain" autocomplete="off">
+              </label>
+              <label>
+                <span>Event date</span>
+                <input id="eventDateInput" name="eventDate" type="date" value="2026-07-16">
+              </label>
+              <label>
+                <span>Pre-event days</span>
+                <input id="preDaysInput" name="preDays" type="number" min="1" max="20" value="5">
+              </label>
+              <label>
+                <span>Post-event days</span>
+                <input id="postDaysInput" name="postDays" type="number" min="1" max="20" value="5">
+              </label>
+              <label>
+                <span>Estimation days</span>
+                <input id="estimationDaysInput" name="estimationDays" type="number" min="6" max="120" value="20">
+              </label>
+            </div>
+
+            <label class="source-box">
+              <span>Source text: announcement, news, transcript, or research note</span>
+              <textarea id="sourceTextInput" rows="12"></textarea>
+            </label>
+
+            <div class="upload-grid">
+              <label class="upload-control">
+                <span>Upload event text</span>
+                <input id="textFileInput" type="file" accept=".txt,.md,.csv,.json">
+                <span class="file-pill">Choose text file</span>
+              </label>
+              <label class="upload-control">
+                <span>Upload asset prices</span>
+                <input id="priceFileInput" type="file" accept=".csv">
+                <span class="file-pill">Choose asset CSV</span>
+              </label>
+              <label class="upload-control">
+                <span>Upload benchmark prices</span>
+                <input id="benchmarkFileInput" type="file" accept=".csv">
+                <span class="file-pill">Choose benchmark CSV</span>
+              </label>
+            </div>
+            <p class="form-note" id="inputStatus">Scenario loaded. Run analysis or replace the text/CSV with your own data.</p>
+          </form>
+
+          <section class="panel metrics-panel" id="diagnostics" aria-label="Summary metrics">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Live Output</p>
+                <h3>Decision Snapshot</h3>
+              </div>
+              <span class="pill">Market Model</span>
+            </div>
+
+            <div class="metric-grid">
+              <div class="metric"><span>Risk score</span><strong id="scoreMetric">-</strong></div>
+              <div class="metric"><span>Risk band</span><strong id="bandMetric">-</strong></div>
+              <div class="metric"><span>Cumulative abnormal return</span><strong id="carMetric">-</strong></div>
+              <div class="metric"><span>Day-0 abnormal return</span><strong id="day0Metric">-</strong></div>
+              <div class="metric"><span>Market beta</span><strong id="betaMetric">-</strong></div>
+              <div class="metric"><span>T-stat / p-value</span><strong id="tStatMetric">-</strong></div>
+              <div class="metric"><span>Daily 95% VaR</span><strong id="varMetric">-</strong></div>
+              <div class="metric"><span>Max drawdown</span><strong id="drawdownMetric">-</strong></div>
+            </div>
+
+            <div class="canvas-wrap">
+              <canvas id="priceCanvas" width="720" height="300" aria-label="Indexed asset and benchmark chart"></canvas>
+            </div>
+
+            <div class="signal-strip" id="signalStrip" aria-label="Signal tags"></div>
+          </section>
+        </section>
+
+        <section class="two-column">
+          <section class="panel" id="agent">
+            <div class="panel-heading"><div><p class="eyebrow">Agent Trace</p><h3>Traceable Analysis Pipeline</h3></div></div>
+            <ol class="agent-steps" id="agentSteps"></ol>
+          </section>
+
+          <section class="panel">
+            <div class="panel-heading"><div><p class="eyebrow">Risk Attribution</p><h3>Score Components</h3></div></div>
+            <div class="risk-bars" id="riskBars"></div>
+            <div class="method-note">
+              <h4>Method Note</h4>
+              <p>The current engine is deterministic: it extracts evidence with a transparent lexicon, estimates a market model, calculates abnormal returns, and synthesizes a memo from inspectable intermediate outputs.</p>
+            </div>
+          </section>
+        </section>
+
+        <section class="panel report-panel" id="report">
+          <div class="panel-heading">
+            <div><p class="eyebrow">Generated Memo</p><h3>Investment Risk Memo</h3></div>
+            <button class="icon-button ghost" id="exportButton" title="Export markdown report" type="button"><span aria-hidden="true">MD</span><span>Export Memo</span></button>
+          </div>
+          <div class="report-layout">
+            <article class="memo" id="reportOutput"></article>
+            <aside class="evidence-list" aria-label="Evidence list"><h4>Evidence Used</h4><div id="evidenceOutput"></div></aside>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "name": "finsight-agent",
+  "version": "1.1.0",
+  "description": "An AI-assisted financial event risk analyst with evidence extraction, event-study diagnostics, and traceable memo generation.",
+  "type": "module",
+  "scripts": {
+    "build": "npm run compile && node scripts/copy-dist.mjs",
+    "compile": "tsc -p tsconfig.build.json",
+    "compile:test": "tsc -p tsconfig.test.json",
+    "start": "npm run build && node server.js",
+    "test": "npm run compile:test && node .test-build/tests/finance.test.js && node .test-build/tests/agent.test.js",
+    "check": "npm run test && npm run build"
+  },
+  "keywords": [
+    "ai-agent",
+    "financial-engineering",
+    "risk-analysis",
+    "event-study",
+    "portfolio"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "22.18.8",
+    "typescript": "5.9.2"
+  }
+}
